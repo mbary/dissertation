@@ -18,8 +18,8 @@ class CamExtractor():
     """
         Extracts cam features from the model
     """
-    def __init__(self, model, target_layer,device):
-        self.model = model.to(device)
+    def __init__(self, model, target_layer):
+        self.model = model
         self.target_layer = target_layer
 
 
@@ -54,7 +54,7 @@ class CamExtractor():
         # Redefine the FC to match the
         #conv layer and num of classes
         fc_in_feaures = x.shape[1]
-        self.model.fc = nn.Linear(fc_in_feaures,65).cuda()
+        self.model.fc = nn.Linear(fc_in_feaures,65)
 
         x=x.view(x.size(0),-1)
         # print("x shape before fc",x.shape)
@@ -66,11 +66,11 @@ class ScoreCam():
     """
         Produces class activation map
     """
-    def __init__(self, model, target_layer, device):
-        self.model = model.to(device)
+    def __init__(self, model, target_layer):
+        self.model = model
         self.model.eval()
         # Define extractor
-        self.extractor = CamExtractor(self.model, target_layer, device)
+        self.extractor = CamExtractor(self.model, target_layer)
 
     def apply_colormap_on_image(self, filename, activation, input_image ,colormap_name="gnuplot2"):
 
