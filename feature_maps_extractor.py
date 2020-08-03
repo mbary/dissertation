@@ -5,16 +5,16 @@ import MapExtrackt
 
 class ExtractFeatureMaps:
 
-    def __init__(self, model, image_name ,display_every_n = 10):
+    def __init__(self, model ,display_every_n = 10):
 
         self.model = model
         self.display_every_n = display_every_n
+
+        #self._extraction()
+
+
+    def extraction(self, image_name):
         self.image_name = image_name
-        self._extraction()
-
-    
-    def _extraction(self):
-
         fe = MapExtrackt.FeatureExtractor(self.model)
         fe.set_image(self.image_name)
 
@@ -27,10 +27,10 @@ class ExtractFeatureMaps:
         for index in desired_indexes:
 
             all_images.append(np.array(fe[index]))
-        
-        all_images_stacked = np.vstack(all_images)
 
-        return all_images_stacked
+
+        # print("from within map extract, type all images", type(all_images_stacked))
+        return np.asarray(all_images)
 
 
 

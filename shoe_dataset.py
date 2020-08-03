@@ -11,44 +11,44 @@ from torch.utils.data import DataLoader, Dataset
 
 
 class ShoeDataSet(Dataset):
-    
-    def __init__(self, data_df,transform = None):
-        
+
+    def __init__(self, data_df, transform = None):
+
         self.data_df = data_df
         self.transform = transform
-    
+
     def __len__(self):
         return len(self.data_df)
-    
+
     def __getitem__(self, idx):
-        
+
         if torch.is_tensor(idx):
             idx = idx.tolist()
-    
-        
-        img_name = self.data_df.iloc[idx, 4] 
 
-        image = Image.open(img_name)
-        print("PIL size", image.size)
+
+        img_name = self.data_df.iloc[idx, 0]
+
+        image = Image.open(img_name).convert('RGB')
+
         arr_img = np.array(image)
-        print("np size", arr_img.shape)
+
         label = self.data_df.iloc[idx, 1]
 
-        
+
         sample  ={"image":image, "label":label}
 
-        
+
         if self.transform:
             image,label = sample["image"],sample["label"]
             image = self.transform(image)
         image = np.array(image)
-        print("last arr shape", image.shape)
-        sample = {"image":image, "label":label}
+
+        sample = {"image":image, "label":label, "file_name":img_name}
 
         return sample
-        
-        
-def train_transformations():  
+
+
+def train_transformations():
 
     transforms_train = torchvision.transforms.Compose([
         torchvision.transforms.RandomPerspective(p = 0.4), # randomly change img perspective
